@@ -12,21 +12,25 @@ jobs:
       
       - name: Install Theos
         run: |
-          brew install make
           git clone https://github.com/theos/theos.git /opt/theos
-          echo 'export THEOS=/opt/theos' >> $GITHUB_ENV
-          echo 'export PATH=$PATH:/opt/theos/bin' >> $GITHUB_ENV
-      
+          echo "THEOS=/opt/theos" >> $GITHUB_ENV
+          echo "PATH=/opt/theos/bin:$PATH" >> $GITHUB_ENV
+          
+      - name: Extract Source
+        run: |
+          unzip -o DIMProgress-Source.zip
+          ls -la
+          
       - name: Build and Package
         run: |
+          ls -la DIMProgress-Source/
           cd DIMProgress-Source
-          unzip -o DIMProgress-Source.zip
           make clean
           make
           make package
-      
+          
       - name: Upload Package
         uses: actions/upload-artifact@v4
         with:
           name: DIMProgress-deb
-          path: DIMProgress-Source/*.deb
+          path: DIMProgress-Source/packages/*.deb
