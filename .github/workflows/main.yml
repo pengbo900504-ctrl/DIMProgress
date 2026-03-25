@@ -11,11 +11,8 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install Theos
-        run: |
-          git clone https://github.com/theos/theos.git /opt/theos
-          echo "THEOS=/opt/theos" >> $GITHUB_ENV
-          echo "PATH=/opt/theos/bin:$PATH" >> $GITHUB_ENV
-          
+        uses: nickspacemanatee/install-theos@main
+        
       - name: Extract Source
         run: |
           unzip -o DIMProgress-Source.zip
@@ -23,8 +20,8 @@ jobs:
           
       - name: Build and Package
         run: |
-          ls -la DIMProgress-Source/
           cd DIMProgress-Source
+          export THEOS=/opt/theos
           make clean
           make
           make package
